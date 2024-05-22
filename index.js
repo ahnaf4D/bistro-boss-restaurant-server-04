@@ -25,12 +25,25 @@ async function run() {
     const reviewCollection = client
       .db('bistroBossRestaurantDB')
       .collection('reviews');
+    const cartCollection = client
+      .db('bistroBossRestaurantDB')
+      .collection('carts');
     app.get('/menu', async (req, res) => {
       const result = await menuCollection.find().toArray();
       res.status(200).send(result);
     });
     app.get('/reviews', async (req, res) => {
       const result = await reviewCollection.find().toArray();
+      res.status(200).send(result);
+    });
+    // carts collection
+    app.get('/carts', async (req, res) => {
+      const result = await cartCollection.find().toArray();
+      res.status(200).send(result);
+    });
+    app.post('/carts', async (req, res) => {
+      const cartItem = req.body;
+      const result = await cartCollection.insertOne(cartItem);
       res.status(200).send(result);
     });
     console.log(
@@ -47,3 +60,10 @@ app.get('/', (req, res) => {
 app.listen(port, (req, res) => {
   console.log(`server listening on ${port}`);
 });
+// --------- Naming Convention
+/***
+ * app.get('/users')
+ * app.get('/users/:id')
+ * app.post('/users')
+ * app.put('/user/:id')
+ * ***/
